@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أركيد الألعاب البسيطة | GitHub Edition</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f9f9f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex-grow: 1;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(108, 92, 231, 0.2);
+        }
+
+        .game-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 220px;
+            margin: 20px auto;
+        }
+
+        .cell {
+            width: 70px;
+            height: 70px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background 0.2s;
+        }
+
+        .cell:hover { background: #e2e2e2; }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🎮 أركيد الألعاب الخمس</h1>
+    <p>استمتع بأشهر الألعاب البسيطة في صفحة واحدة</p>
+</header>
+
+<div class="container">
+    <div class="games-grid">
+        <div class="game-card">
+            <div class="game-icon">❌</div>
+            <h3>إكس أو (Tic Tac Toe)</h3>
+            <div id="ttt-board">
+                <div class="cell" onclick="makeMove(0)"></div>
+                <div class="cell" onclick="makeMove(1)"></div>
+                <div class="cell" onclick="makeMove(2)"></div>
+                <div class="cell" onclick="makeMove(3)"></div>
+                <div class="cell" onclick="makeMove(4)"></div>
+                <div class="cell" onclick="makeMove(5)"></div>
+                <div class="cell" onclick="makeMove(6)"></div>
+                <div class="cell" onclick="makeMove(7)"></div>
+                <div class="cell" onclick="makeMove(8)"></div>
+            </div>
+            <p id="status">دور اللاعب: X</p>
+            <button onclick="resetGame()">إعادة التحدي</button>
+        </div>
+
+        <div class="game-card"><div class="game-icon">🐍</div><h3>الثعبان</h3><p>قريباً...</p><button style="background: #ccc;">قادم</button></div>
+        <div class="game-card"><div class="game-icon">🃏</div><h3>الذاكرة</h3><p>قريباً...</p><button style="background: #ccc;">قادم</button></div>
+        <div class="game-card"><div class="game-icon">🚀</div><h3>الفضاء</h3><p>قريباً...</p><button style="background: #ccc;">قادم</button></div>
+        <div class="game-card"><div class="game-icon">🧱</div><h3>تحطيم الكرات</h3><p>قريباً...</p><button style="background: #ccc;">قادم</button></div>
+    </div>
+</div>
+
+<footer>برمجة ذكاء اصطناعي - 2026</footer>
+
+<script>
+    let currentPlayer = 'X';
+    let board = ['', '', '', '', '', '', '', '', ''];
+    let gameActive = true;
+
+    function makeMove(index) {
+        if (board[index] === '' && gameActive) {
+            board[index] = currentPlayer;
+            const cells = document.getElementsByClassName('cell');
+            cells[index].innerText = currentPlayer;
+            cells[index].style.color = currentPlayer === 'X' ? '#6c5ce7' : '#fd79a8';
+            checkWinner();
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            if (gameActive) document.getElementById('status').innerText = `دور اللاعب: ${currentPlayer}`;
+        }
+    }
+
+    function checkWinner() {
+        const winPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+        for (let p of winPatterns) {
+            if (board[p[0]] && board[p[0]] === board[p[1]] && board[p[0]] === board[p[2]]) {
+                document.getElementById('status').innerText = `🎉 الفائز هو ${board[p[0]]}!`;
+                gameActive = false;
+                return;
+            }
+        }
+        if (!board.includes('')) {
+            document.getElementById('status').innerText = "🤝 تعادل!";
+            gameActive = false;
+        }
+    }
+
+    function resetGame() {
+        board = ['', '', '', '', '', '', '', '', ''];
+        gameActive = true;
+        currentPlayer = 'X';
+        document.getElementById('status').innerText = "دور اللاعب: X";
+        Array.from(document.getElementsByClassName('cell')).forEach(c => c.innerText = '');
+    }
+</script>
+</body>
+</html>
